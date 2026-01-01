@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import ArticleCard from '../components/ArticleCard';
 import Sidebar from '../components/Sidebar';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const Category = () => {
   const { category } = useParams();
@@ -20,10 +21,11 @@ const Category = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`/api/articles/category/${category}?page=${page}&limit=10`);
-      setArticles(response.data.articles);
-      setCurrentPage(response.data.currentPage);
-      setTotalPages(response.data.totalPages);
+      const response = await fetch(`${API_BASE_URL}/articles/category/${category}?page=${page}&limit=10`);
+      const data = await response.json();
+      setArticles(data.articles || []);
+      setCurrentPage(data.currentPage || 1);
+      setTotalPages(data.totalPages || 1);
     } catch (error) {
       console.error('Error fetching articles:', error);
       setError('Failed to load articles. Please try again later.');

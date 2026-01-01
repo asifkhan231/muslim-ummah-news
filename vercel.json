@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "REACT_APP_API_URL": "@react_app_api_url",
+    "REACT_APP_SITE_NAME": "@react_app_site_name",
+    "REACT_APP_SITE_DESCRIPTION": "@react_app_site_description",
+    "REACT_APP_SITE_URL": "@react_app_site_url",
+    "REACT_APP_DEFAULT_IMAGE": "@react_app_default_image",
+    "REACT_APP_TWITTER_HANDLE": "@react_app_twitter_handle",
+    "REACT_APP_FACEBOOK_PAGE": "@react_app_facebook_page"
+  }
+}

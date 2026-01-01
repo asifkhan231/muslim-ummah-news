@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import ArticleCard from '../components/ArticleCard';
 import Sidebar from '../components/Sidebar';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const Videos = () => {
     const [articles, setArticles] = useState([]);
@@ -15,8 +16,9 @@ const Videos = () => {
     const fetchVideoArticles = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('/api/articles?hasVideo=true&limit=20');
-            setArticles(response.data.articles);
+            const response = await fetch(`${API_BASE_URL}/articles?hasVideo=true&limit=20`);
+            const data = await response.json();
+            setArticles(data.articles || []);
         } catch (error) {
             console.error('Error fetching video articles:', error);
             setError('Failed to load videos.');

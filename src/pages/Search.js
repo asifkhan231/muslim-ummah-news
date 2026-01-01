@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
 import ArticleCard from '../components/ArticleCard';
 import Sidebar from '../components/Sidebar';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const Search = () => {
   const [searchParams] = useSearchParams();
@@ -23,10 +24,11 @@ const Search = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`/api/articles?page=${page}&limit=10&search=${encodeURIComponent(query)}`);
-      setArticles(response.data.articles);
-      setCurrentPage(response.data.currentPage);
-      setTotalPages(response.data.totalPages);
+      const response = await fetch(`${API_BASE_URL}/articles?page=${page}&limit=10&search=${encodeURIComponent(query)}`);
+      const data = await response.json();
+      setArticles(data.articles || []);
+      setCurrentPage(data.currentPage || 1);
+      setTotalPages(data.totalPages || 1);
     } catch (error) {
       console.error('Error fetching articles:', error);
       setError('Failed to load search results. Please try again later.');

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const MostPopular = () => {
     const [articles, setArticles] = useState([]);
@@ -12,8 +13,9 @@ const MostPopular = () => {
 
     const fetchPopularArticles = async () => {
         try {
-            const response = await axios.get('/api/articles/popular?limit=5');
-            setArticles(response.data);
+            const response = await fetch(`${API_BASE_URL}/articles?limit=5&sort=views`);
+            const data = await response.json();
+            setArticles(data.articles || []);
         } catch (error) {
             console.error('Error fetching popular articles:', error);
         } finally {

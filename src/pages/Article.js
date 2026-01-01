@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const Article = () => {
   const { id } = useParams();
@@ -12,8 +13,9 @@ const Article = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`/api/articles/${id}`);
-      setArticle(response.data);
+      const response = await fetch(`${API_BASE_URL}/articles/${id}`);
+      const data = await response.json();
+      setArticle(data);
     } catch (error) {
       console.error('Error fetching article:', error);
       setError('Failed to load article. Please try again later.');
