@@ -21,6 +21,7 @@ const Home = () => {
   const fetchBreakingNews = async () => {
     try {
       console.log('Fetching breaking news...'); 
+      console.log('API URL:', `${process.env.REACT_APP_API_URL}/articles?limit=5`);
       const response = await fetch(`${process.env.REACT_APP_API_URL}/articles?limit=5`);
       const data = await response.json();
       console.log('Breaking news response:', data);
