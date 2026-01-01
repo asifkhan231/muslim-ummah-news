@@ -3,8 +3,7 @@ import Sidebar from '../components/Sidebar';
 import HeroCarousel from '../components/HeroCarousel';
 import ArticleCard from '../components/ArticleCard';
 import { Link } from 'react-router-dom';
-
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+import { API_BASE_URL } from '../config/api';
 
 const Home = () => {
   const [articles, setArticles] = useState([]);
