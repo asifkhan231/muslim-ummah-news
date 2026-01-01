@@ -3,6 +3,9 @@ import Sidebar from '../components/Sidebar';
 import HeroCarousel from '../components/HeroCarousel';
 import ArticleCard from '../components/ArticleCard';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config/api';
+
+console.log('apis base url',API_BASE_URL)
 
 const Home = () => {
   const [articles, setArticles] = useState([]);
@@ -21,8 +24,7 @@ const Home = () => {
   const fetchBreakingNews = async () => {
     try {
       console.log('Fetching breaking news...'); 
-      console.log('API URL:', `${process.env.REACT_APP_API_URL}/articles?limit=5`);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/articles?limit=5`);
+      const response = await fetch(`${API_BASE_URL}/articles?limit=5`);
       const data = await response.json();
       console.log('Breaking news response:', data);
       setBreakingNews(data.articles || []);
@@ -36,7 +38,7 @@ const Home = () => {
       setLoading(true);
       console.log('Fetching articles for page:', page);
       
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/articles?page=${page}&limit=10`);
+      const response = await fetch(`${API_BASE_URL}/articles?page=${page}&limit=10`);
       const data = await response.json();
       
       console.log('Articles response:', data);
