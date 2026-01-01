@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { API_BASE_URL } from '../config/api';
 
 const MostPopular = () => {
     const [articles, setArticles] = useState([]);
@@ -12,7 +11,7 @@ const MostPopular = () => {
 
     const fetchPopularArticles = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/articles?limit=5&sort=views`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/articles?limit=5&sort=views`);
             const data = await response.json();
             setArticles(data.articles || []);
         } catch (error) {

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ArticleCard from '../components/ArticleCard';
 import Sidebar from '../components/Sidebar';
-import { API_BASE_URL } from '../config/api';
 
 const Search = () => {
   const [searchParams] = useSearchParams();
@@ -23,7 +22,7 @@ const Search = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(`${API_BASE_URL}/articles?page=${page}&limit=10&search=${encodeURIComponent(query)}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/articles?page=${page}&limit=10&search=${encodeURIComponent(query)}`);
       const data = await response.json();
       setArticles(data.articles || []);
       setCurrentPage(data.currentPage || 1);

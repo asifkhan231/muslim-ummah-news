@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ArticleCard from '../components/ArticleCard';
 import Sidebar from '../components/Sidebar';
-import { API_BASE_URL } from '../config/api';
 
 const Videos = () => {
     const [articles, setArticles] = useState([]);
@@ -15,7 +14,7 @@ const Videos = () => {
     const fetchVideoArticles = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${API_BASE_URL}/articles?hasVideo=true&limit=20`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/articles?hasVideo=true&limit=20`);
             const data = await response.json();
             setArticles(data.articles || []);
         } catch (error) {

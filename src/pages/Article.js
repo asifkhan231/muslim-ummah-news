@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { API_BASE_URL } from '../config/api';
 
 const Article = () => {
   const { id } = useParams();
@@ -12,7 +11,7 @@ const Article = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(`${API_BASE_URL}/articles/${id}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/articles/${id}`);
       const data = await response.json();
       setArticle(data);
     } catch (error) {
