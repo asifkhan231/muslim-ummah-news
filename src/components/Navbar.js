@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  
   const currentDate = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
 
   return (
     <header className="site-header">
@@ -25,9 +36,6 @@ const Navbar = () => {
               <a href="#" className="top-bar-link"><i className="fab fa-twitter"></i></a>
               <a href="#" className="top-bar-link"><i className="fab fa-instagram"></i></a>
               <a href="#" className="top-bar-link"><i className="fab fa-youtube"></i></a>
-              {/* <span className="mx-3 text-secondary">|</span>
-              <a href="#" className="top-bar-link">Login</a>
-              <a href="#" className="top-bar-link">Register</a> */}
             </div>
           </div>
         </div>
@@ -79,17 +87,31 @@ const Navbar = () => {
                 <NavLink to="/category/technology" className="nav-link">TECH</NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to="/category/sport" className="nav-link">SPORT</NavLink>
+                <NavLink to="/category/sports" className="nav-link">SPORT</NavLink>
               </li>
               <li className="nav-item">
                 <NavLink to="/category/culture" className="nav-link">CULTURE</NavLink>
               </li>
+              <li className="nav-item">
+                <NavLink to="/category/human-rights" className="nav-link">HUMAN RIGHTS</NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/category/middle-east" className="nav-link">REGIONS</NavLink>
+              </li>
             </ul>
             <div className="d-flex align-items-center py-2 py-lg-0">
-              <div className="input-group">
-                <input type="text" className="form-control form-control-sm rounded-0" placeholder="Search..." />
-                <button className="btn btn-red btn-sm rounded-0"><i className="fas fa-search"></i></button>
-              </div>
+              <form onSubmit={handleSearch} className="input-group">
+                <input 
+                  type="text" 
+                  className="form-control form-control-sm rounded-0" 
+                  placeholder="Search..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button type="submit" className="btn btn-red btn-sm rounded-0">
+                  <i className="fas fa-search"></i>
+                </button>
+              </form>
             </div>
           </div>
         </div>

@@ -1,8 +1,103 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config/api';
 
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState('recent');
+  const [recentArticles, setRecentArticles] = useState([]);
+  const [popularArticles, setPopularArticles] = useState([]);
+  const [stats, setStats] = useState({ articles: 0, sources: 0, categories: 0 });
+  const [categories, setCategories] = useState([]);
+  const [sources, setSources] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchSidebarData();
+  }, []);
+
+  const fetchSidebarData = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch recent articles
+      const recentResponse = await fetch(`${API_BASE_URL}/articles/recent?limit=4`);
+      const recentData = await recentResponse.json();
+      console.log('Recent articles:', recentData);
+      setRecentArticles(Array.isArray(recentData) ? recentData : []);
+
+      // Fetch popular articles
+      const popularResponse = await fetch(`${API_BASE_URL}/articles/popular?limit=4`);
+      const popularData = await popularResponse.json();
+      console.log('Popular articles:', popularData);
+      setPopularArticles(Array.isArray(popularData) ? popularData : []);
+
+      // Fetch stats
+      const statsResponse = await fetch(`${API_BASE_URL}/articles/stats`);
+      const statsData = await statsResponse.json();
+      console.log('Stats data:', statsData);
+      
+      // Parse the stats correctly
+      const parsedStats = {
+        totalArticles: statsData.totalArticles || 0,
+        totalSources: 0, // Will be updated from sources API
+        categories: statsData.categoriesStats ? statsData.categoriesStats.length : 0
+      };
+      
+      // Create category counts object
+      const categoryCounts = {};
+      if (statsData.categoriesStats) {
+        statsData.categoriesStats.forEach(cat => {
+          categoryCounts[cat._id] = cat.count;
+        });
+      }
+
+      // Fetch sources
+      const sourcesResponse = await fetch(`${API_BASE_URL}/sources/stats`);
+      const sourcesData = await sourcesResponse.json();
+      console.log('Sources data:', sourcesData);
+      
+      // Also fetch individual sources for display
+      const individualSourcesResponse = await fetch(`${API_BASE_URL}/sources`);
+      const individualSourcesData = await individualSourcesResponse.json();
+      console.log('Individual sources:', individualSourcesData);
+      
+      // Update total sources count
+      parsedStats.totalSources = sourcesData.totalSources || 0;
+      
+      // Set the parsed stats
+      setStats(parsedStats);
+      
+      // Use individual sources for display
+      setSources(Array.isArray(individualSourcesData) ? individualSourcesData : []);
+
+      // Set categories with counts from stats
+      if (categoryCounts && Object.keys(categoryCounts).length > 0) {
+        const categoryList = Object.entries(categoryCounts).map(([name, count]) => ({
+          name: name.charAt(0).toUpperCase() + name.slice(1).replace('-', ' '),
+          slug: name,
+          count
+        })).sort((a, b) => b.count - a.count);
+        setCategories(categoryList);
+      }
+
+    } catch (error) {
+      console.error('Error fetching sidebar data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric'
+    }).toUpperCase();
+  };
+
+  const truncateTitle = (title, maxLength = 50) => {
+    return title.length > maxLength ? title.substring(0, maxLength) + '...' : title;
+  };
 
   return (
     <div className="sidebar">
@@ -17,7 +112,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* 2. Tabbed Widget (Newsbox signature) */}
+      {/* 2. Tabbed Widget - Recent/Popular Articles */}
       <div className="widget mb-5">
         <div className="widget-tab-nav mb-3">
           <ul className="nav nav-tabs border-0" role="tablist">
@@ -41,119 +136,134 @@ const Sidebar = () => {
         </div>
 
         <div className="widget-content">
-          {/* Mock Content for Tabs */}
-          <div className="d-flex flex-column gap-3">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="d-flex align-items-center">
-                <div className="bg-light me-3" style={{ width: '60px', height: '60px', borderRadius: '2px' }}></div>
-                <div>
-                  <h6 className="mb-1 small fw-bold">
-                    <a href="#" className="text-decoration-none text-dark">
-                      Example Story Title {i} Goes Here
-                    </a>
-                  </h6>
-                  <small className="text-muted" style={{ fontSize: '10px' }}>JAN 01, 2026</small>
+          {loading ? (
+            <div className="text-center py-3">
+              <div className="spinner-border spinner-border-sm" role="status"></div>
+            </div>
+          ) : (
+            <div className="d-flex flex-column gap-3">
+              {(activeTab === 'recent' ? recentArticles : popularArticles).map(article => (
+                <div key={article._id} className="d-flex align-items-center">
+                  <div 
+                    className="bg-light me-3 d-flex align-items-center justify-content-center" 
+                    style={{ 
+                      width: '60px', 
+                      height: '60px', 
+                      borderRadius: '2px',
+                      backgroundImage: article.imageUrl ? `url(${article.imageUrl})` : 'none',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }}
+                  >
+                    {!article.imageUrl && <i className="fas fa-newspaper text-muted"></i>}
+                  </div>
+                  <div>
+                    <h6 className="mb-1 small fw-bold">
+                      <Link to={`/article/${article._id}`} className="text-decoration-none text-dark">
+                        {truncateTitle(article.title)}
+                      </Link>
+                    </h6>
+                    <small className="text-muted" style={{ fontSize: '10px' }}>
+                      {formatDate(article.publishedAt)}
+                    </small>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* 2. Quick Stats Widget (Restored) */}
+      {/* 3. Quick Stats Widget */}
       <div className="widget mb-5">
         <h4 className="section-title">Quick Stats</h4>
         <div className="d-flex border border-light">
           <div className="widget-stats-item flex-grow-1">
-            <span className="stat-value text-danger">35</span>
+            <span className="stat-value text-danger">{stats.totalArticles || 0}</span>
             <span className="stat-label">Articles</span>
           </div>
           <div className="widget-stats-item flex-grow-1">
-            <span className="stat-value text-dark">10</span>
+            <span className="stat-value text-dark">{stats.totalSources || 0}</span>
             <span className="stat-label">Sources</span>
           </div>
           <div className="widget-stats-item flex-grow-1">
-            <span className="stat-value text-dark">8</span>
+            <span className="stat-value text-dark">{categories.length || 0}</span>
             <span className="stat-label">Cats</span>
           </div>
         </div>
       </div>
 
-      {/* 3. Browse Categories Widget (Restored) */}
+      {/* 4. Browse Categories Widget */}
       <div className="widget mb-5">
         <h4 className="section-title">Browse Categories</h4>
         <div className="cat-list">
-          {[
-            { name: 'Palestine', count: 20 },
-            { name: 'Tragedy', count: 0 },
-            { name: 'Middle East', count: 6 },
-            { name: 'South Asia', count: 1 },
-            { name: 'Southeast Asia', count: 3 },
-            { name: 'Africa', count: 1 },
-            { name: 'Europe', count: 1 },
-            { name: 'Americas', count: 1 }
-          ].map((cat, idx) => (
-            <Link key={idx} to={`/category/${cat.name.toLowerCase().replace(' ', '-')}`} className="text-decoration-none">
-              <div className="cat-list-item">
-                <span className="cat-name">{cat.name}</span>
-                <span className="cat-count">{cat.count}</span>
-              </div>
-            </Link>
-          ))}
+          {loading ? (
+            <div className="text-center py-3">
+              <div className="spinner-border spinner-border-sm" role="status"></div>
+            </div>
+          ) : (
+            categories.slice(0, 8).map((cat, idx) => (
+              <Link key={idx} to={`/category/${cat.slug}`} className="text-decoration-none">
+                <div className="cat-list-item">
+                  <span className="cat-name">{cat.name}</span>
+                  <span className="cat-count">{cat.count}</span>
+                </div>
+              </Link>
+            ))
+          )}
         </div>
         <div className="mt-3">
-          <button className="btn btn-outline-dark w-100 rounded-0 text-uppercase small fw-bold">View All</button>
+          <Link to="/categories" className="btn btn-outline-dark w-100 rounded-0 text-uppercase small fw-bold">
+            View All
+          </Link>
         </div>
       </div>
 
-      {/* 4. Trusted Sources Widget (Restored) */}
+      {/* 5. Trusted Sources Widget */}
       <div className="widget mb-5">
         <h4 className="section-title"><i className="fas fa-rss me-2"></i>Trusted Sources</h4>
         <div className="d-flex flex-column">
-          {[
-            { name: 'Al Jazeera English', loc: 'Qatar', count: 3, color: '#0050acc0' },
-            { name: 'Anadolu Agency', loc: 'Turkey', count: 0, color: '#0065a3' },
-            { name: 'Arab News', loc: 'Saudi Arabia', count: 0, color: '#006c35' },
-            { name: 'Dawn News', loc: 'Pakistan', count: 0, color: '#1a73e8' },
-            { name: 'Islamic Society of NA', loc: 'USA', count: 0, color: '#0056b3' },
-            { name: 'Jakarta Post', loc: 'Indonesia', count: 3, color: '#0056b3' },
-            { name: 'Middle East Eye', loc: 'UK', count: 3, color: '#d32f2f' },
-            { name: 'Muslim News', loc: 'UK', count: 8, color: '#1976d2' }
-          ].map((source, idx) => (
-            <div key={idx} className="source-card">
-              <div className="source-icon" style={{ backgroundColor: source.color }}>
-                <i className="fas fa-globe"></i>
-              </div>
-              <div className="source-info">
-                <h6>{source.name}</h6>
-                <div className="source-meta">
-                  <i className="fas fa-map-marker-alt me-1"></i>{source.loc}
-                  <span className="mx-1">|</span>
-                  <i className="far fa-newspaper me-1"></i>{source.count} articles
+          {loading ? (
+            <div className="text-center py-3">
+              <div className="spinner-border spinner-border-sm" role="status"></div>
+            </div>
+          ) : (
+            sources.slice(0, 6).map((source, idx) => (
+              <div key={idx} className="source-card">
+                <div className="source-icon" style={{ backgroundColor: `hsl(${idx * 60}, 70%, 50%)` }}>
+                  <i className="fas fa-globe"></i>
+                </div>
+                <div className="source-info">
+                  <h6>{source.name}</h6>
+                  <div className="source-meta">
+                    <i className="fas fa-map-marker-alt me-1"></i>{source.country || 'Global'}
+                    <span className="mx-1">|</span>
+                    <i className="far fa-newspaper me-1"></i>{source.articlesCount || 0} articles
+                  </div>
+                </div>
+                <div className="source-link-icon">
+                  <i className="fas fa-external-link-alt"></i>
                 </div>
               </div>
-              <div className="source-link-icon">
-                <i className="fas fa-external-link-alt"></i>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 
-      {/* 5. Trending Topics (Restored Tags) */}
+      {/* 6. Trending Topics */}
       <div className="widget mb-5">
         <h4 className="section-title">Trending Topics</h4>
         <div className="trending-tags">
-          <Link to="/tag/palestine" className="btn-tag">#Palestine</Link>
-          <Link to="/tag/islamic-finance" className="btn-tag">#Islamic Finance</Link>
-          <Link to="/tag/ramadan" className="btn-tag">#Ramadan</Link>
-          <Link to="/tag/halal-industry" className="btn-tag">#Halal Industry</Link>
-          <Link to="/tag/charity" className="btn-tag">#Charity</Link>
-          <Link to="/tag/education" className="btn-tag">#Education</Link>
+          <Link to="/category/palestine" className="btn-tag">#Palestine</Link>
+          <Link to="/category/politics" className="btn-tag">#Politics</Link>
+          <Link to="/category/economics" className="btn-tag">#Economics</Link>
+          <Link to="/category/technology" className="btn-tag">#Technology</Link>
+          <Link to="/category/culture" className="btn-tag">#Culture</Link>
+          <Link to="/category/education" className="btn-tag">#Education</Link>
         </div>
       </div>
 
-      {/* 6. Newsletter Widget */}
+      {/* 7. Newsletter Widget */}
       <div className="widget mb-5 bg-light p-4 text-center border-top border-danger border-3">
         <h4 className="section-title border-0 mb-3">Newsletter</h4>
         <p className="small text-muted mb-3">Subscribe to our newsletter to get latest news.</p>
@@ -161,7 +271,7 @@ const Sidebar = () => {
         <button className="btn btn-red w-100 rounded-0">SUBSCRIBE</button>
       </div>
 
-      {/* 4. Advertisement Widget */}
+      {/* 8. Advertisement Widget */}
       <div className="widget text-center">
         <div className="bg-light border p-5 d-flex align-items-center justify-content-center text-muted">
           ADVERTISEMENT 300x250

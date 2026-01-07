@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './critical.css'; // Load critical CSS first
+import PerformanceOptimizer from './components/PerformanceOptimizer';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Category from './pages/Category';
@@ -14,6 +16,7 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <PerformanceOptimizer />
         <Navbar />
         <main>
           <Routes>

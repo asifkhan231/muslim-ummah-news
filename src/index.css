@@ -161,6 +161,9 @@ a:hover {
   position: relative;
   overflow: hidden;
   margin-bottom: 40px;
+  /* Fixed height to prevent layout shift */
+  height: 500px;
+  width: 100%;
 }
 
 .hero-slide {
@@ -168,6 +171,9 @@ a:hover {
   position: relative;
   background-size: cover;
   background-position: center;
+  /* Prevent layout shift during image load */
+  min-height: 500px;
+  width: 100%;
 }
 
 .hero-overlay {
@@ -178,6 +184,8 @@ a:hover {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
   padding: 60px 40px 40px;
   color: white;
+  /* Prevent text shifting */
+  min-height: 200px;
 }
 
 .hero-cat-badge {
@@ -190,6 +198,9 @@ a:hover {
   font-weight: 600;
   display: inline-block;
   margin-bottom: 10px;
+  /* Fixed dimensions to prevent shift */
+  min-width: 60px;
+  text-align: center;
 }
 
 .hero-title {
@@ -199,6 +210,9 @@ a:hover {
   color: white;
   margin-bottom: 10px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  /* Prevent title shifting */
+  line-height: 1.2;
+  min-height: 3.6rem; /* 2.5rem * 1.2 line-height + margin */
 }
 
 .hero-meta {
@@ -206,6 +220,9 @@ a:hover {
   font-family: var(--font-oswald);
   font-size: 13px;
   text-transform: uppercase;
+  /* Fixed height to prevent shift */
+  height: 20px;
+  line-height: 20px;
 }
 
 /* =========================================
@@ -272,11 +289,11 @@ a:hover {
 
 .post-cat {
   position: absolute;
-  bottom: 0;
+  bottom:0;
   left: 0;
   background: var(--primary-color);
   color: white;
-  padding: 3px 10px;
+  padding: 3px 0px;
   font-size: 11px;
   text-transform: uppercase;
   font-family: var(--font-oswald);
@@ -580,4 +597,456 @@ footer h4 {
   border-top: 1px solid #222;
   text-align: center;
   font-size: 13px;
+}
+
+/* =========================================
+   POST CARDS & LAYOUT STABILITY - COMPACT VERSION
+   ========================================= */
+.post-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+  height: 100%;
+  /* Prevent layout shift */
+  min-height: 350px;
+}
+
+.post-card.compact {
+  min-height: 320px; /* More compact */
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.post-thumb {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  /* Fixed dimensions to prevent shift */
+  width: 100%;
+  background-color: #f8f9fa;
+}
+
+.post-card.compact .post-thumb {
+  height: 180px; /* More compact */
+}
+
+.post-thumb img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.post-card.compact .post-thumb img {
+  height: 180px; /* More compact */
+}
+
+.post-card:hover .post-thumb img {
+  transform: scale(1.05);
+}
+
+.post-content {
+  padding: 20px;
+  /* Fixed height to prevent layout shift */
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-content.compact {
+  padding: 15px; /* More compact */
+  min-height: 140px; /* More compact */
+}
+
+.post-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  /* Fixed line height to prevent shift */
+  line-height: 1.4;
+  min-height: 2.8rem; /* 2 lines minimum */
+}
+
+.post-title.compact {
+  font-size: 1rem; /* Smaller font */
+  min-height: 2.4rem; /* More compact */
+  margin-bottom: 8px;
+}
+
+.post-title a {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.post-title a:hover {
+  color: var(--primary-color);
+}
+
+.post-meta {
+  font-family: var(--font-oswald);
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  /* Fixed height */
+  height: 20px;
+  line-height: 20px;
+}
+
+.post-meta.compact {
+  font-size: 11px; /* Smaller font */
+  height: 18px;
+  line-height: 18px;
+}
+
+.post-content p.compact {
+  font-size: 0.85rem; /* Smaller text */
+  line-height: 1.4;
+  margin-bottom: 0;
+}
+
+.post-cat {
+  position: absolute;
+  background: var(--primary-color);
+  color: white;
+  padding: 4px 8px;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-family: var(--font-oswald);
+  font-weight: 600;
+  /* Fixed dimensions */
+  min-width: 60px;
+  text-align: center;
+  border-radius: 1px;
+  z-index: 2;
+}
+
+/* AI Badge - Moved to top right of image */
+.ai-badge-overlay {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 123, 255, 0.9);
+  color: white;
+  padding: 6px 8px;
+  border-radius: 50%;
+  font-size: 12px;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+}
+
+/* AI Facts - Moved to bottom of image as overlay */
+.ai-facts-overlay {
+  position: absolute;
+  bottom: 5px;
+  /* left: 8px; */
+  right: 0;
+  background: rgba(0, 123, 255, 0.5);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 11px;
+  text-align: center;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+  font-weight: 500;
+}
+
+/* Remove old AI elements */
+.ai-badge {
+  display: none;
+}
+
+.ai-facts-preview {
+  display: none;
+}
+
+/* =========================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================= */
+/* Prevent font loading layout shift */
+body {
+  font-display: swap;
+}
+
+/* Optimize image loading */
+img {
+  font-display: swap;
+}
+
+/* Reduce paint complexity */
+* {
+  box-sizing: border-box;
+}
+
+/* Optimize animations */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+/* =========================================
+   CATEGORY PAGE IMPROVEMENTS
+   ========================================= */
+.category-header {
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  border-left: 4px solid var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.category-header:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.category-icon {
+  transition: transform 0.3s ease;
+}
+
+.category-header:hover .category-icon {
+  transform: scale(1.1);
+}
+
+.empty-state {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  border: 2px dashed #dee2e6;
+}
+
+.empty-state i {
+  opacity: 0.6;
+}
+
+/* =========================================
+   LOADING IMPROVEMENTS
+   ========================================= */
+.loading-spinner {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 3rem 2rem;
+}
+
+/* =========================================
+   DROPDOWN IMPROVEMENTS
+   ========================================= */
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+}
+
+.dropdown-item {
+  padding: 0.75rem 1.5rem;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.dropdown-item:hover {
+  background-color: var(--primary-color);
+  color: white;
+  border-left-color: rgba(255,255,255,0.3);
+  transform: translateX(5px);
+}
+
+.dropdown-item:focus {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* =========================================
+   PAGINATION IMPROVEMENTS
+   ========================================= */
+.pagination {
+  margin-top: 2rem;
+}
+
+.page-link {
+  border: none;
+  color: var(--primary-color);
+  padding: 0.75rem 1rem;
+  margin: 0 0.25rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.page-link:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.page-item.active .page-link {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* =========================================
+   RESPONSIVE IMPROVEMENTS
+   ========================================= */
+@media (max-width: 768px) {
+  .category-header {
+    padding: 2rem 1.5rem !important;
+  }
+  
+  .category-header .d-flex {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .category-icon {
+    margin-bottom: 1rem !important;
+    margin-right: 0 !important;
+  }
+  
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+  
+  .loading-spinner {
+    padding: 2rem 1rem;
+  }
+}
+/* =========================================
+   BREADCRUMB IMPROVEMENTS
+   ========================================= */
+.breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.breadcrumb-item {
+  font-size: 0.9rem;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "›";
+  color: #6c757d;
+  font-weight: bold;
+}
+
+.breadcrumb-item a {
+  color: var(--primary-color);
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-item a:hover {
+  color: #dc3545;
+}
+
+.breadcrumb-item.active {
+  color: #6c757d;
+  font-weight: 500;
+}
+/* =========================================
+   NAVBAR DROPDOWN FIXES - REMOVE ARROW COMPLETELY
+   ========================================= */
+.navbar-nav .dropdown-toggle::after {
+  display: none !important; /* Remove the arrow completely */
+}
+
+.navbar-nav .dropdown-toggle:empty::after {
+  display: none !important;
+}
+
+/* Alternative: If you want to keep the arrow but fix positioning */
+/*
+.navbar-nav .dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.5em;
+  vertical-align: middle;
+  content: "";
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
+}
+*/
+
+/* Fix dropdown positioning */
+.navbar .dropdown-menu {
+  top: 100%;
+  left: 0;
+  margin-top: 0;
+}
+/* =========================================
+   MOBILE RESPONSIVE IMPROVEMENTS FOR COMPACT CARDS
+   ========================================= */
+@media (max-width: 768px) {
+  .post-card.compact {
+    min-height: 280px; /* Even more compact on mobile */
+  }
+  
+  .post-card.compact .post-thumb {
+    height: 150px; /* Smaller image on mobile */
+  }
+  
+  .post-card.compact .post-thumb img {
+    height: 150px;
+  }
+  
+  .post-content.compact {
+    padding: 12px; /* Less padding on mobile */
+    min-height: 130px;
+  }
+  
+  .post-title.compact {
+    font-size: 0.9rem; /* Smaller title on mobile */
+    min-height: 2rem;
+  }
+  
+  .post-meta.compact {
+    font-size: 10px;
+  }
+  
+  .post-content p.compact {
+    font-size: 0.8rem;
+  }
+  
+  .ai-facts-overlay {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  
+  .ai-badge-overlay {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+}
+
+/* =========================================
+   DROPDOWN ARROW POSITIONING FIX - OVERRIDE
+   ========================================= */
+.dropdown-toggle::after {
+  display: none !important; /* Remove all dropdown arrows */
+}
+
+/* Ensure dropdown works on mobile */
+@media (max-width: 991.98px) {
+  .navbar-collapse .dropdown-menu {
+    position: static !important;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+  
+  .navbar-collapse .dropdown-item {
+    padding-left: 2rem;
+    color: #333;
+  }
 }

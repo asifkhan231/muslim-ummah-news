@@ -11,16 +11,49 @@
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"></noscript>
+    
+    <!-- Preload Bootstrap CSS -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"></noscript>
+    
+    <!-- Load Font Awesome asynchronously -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+    
+    <!-- DNS prefetch for external domains -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    
+    <!-- Preconnect to API domain -->
+    <link rel="preconnect" href="https://muslim-ummah-news-backend.vercel.app">
+    
+    <!-- Inline critical CSS for faster rendering -->
+    <style>
+      /* Critical CSS for above-the-fold content */
+      .App{min-height:100vh;display:flex;flex-direction:column}
+      main{flex:1}
+      .hero-slider-wrap{position:relative;overflow:hidden;margin-bottom:40px;height:500px;width:100%;background-color:#f8f9fa}
+      .hero-slide{height:500px;position:relative;background-size:cover;background-position:center;min-height:500px;width:100%}
+      .hero-overlay{position:absolute;bottom:0;left:0;width:100%;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);padding:60px 40px 40px;color:white;min-height:200px}
+      .hero-title{font-size:2.5rem;font-weight:700;color:white;margin-bottom:10px;text-shadow:1px 1px 3px rgba(0,0,0,0.5);line-height:1.2;min-height:3.6rem}
+      .breaking-news-bar{background:#000;color:white;overflow:hidden}
+      .post-card{background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:transform 0.2s;height:100%}
+      .post-thumb{position:relative;height:200px;overflow:hidden}
+      .post-thumb img{width:100%;height:200px;object-fit:cover}
+      body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto',sans-serif}
+      .spinner-border{width:3rem;height:3rem}
+    </style>
     <title>Ummah News Hub - Global Muslim Community News</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Load Bootstrap JS asynchronously -->
+    <script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

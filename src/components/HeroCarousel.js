@@ -3,15 +3,43 @@ import { Link } from 'react-router-dom';
 
 const HeroCarousel = ({ articles }) => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     // Auto-advance
     useEffect(() => {
+        if (!articles || articles.length === 0) return;
+        
         const interval = setInterval(() => {
             setActiveIndex((current) => (current + 1) % Math.min(articles.length, 5));
         }, 5000);
         return () => clearInterval(interval);
-    }, [articles.length]);
+    }, [articles]);
 
+    // Preload the first image for LCP optimization
+    useEffect(() => {
+        if (!articles || articles.length === 0) return;
+        
+        const featured = articles.slice(0, 5);
+        const activeArticle = featured[activeIndex];
+        
+        if (activeArticle?.imageUrl) {
+            const img = new Image();
+            img.onload = () => setImageLoaded(true);
+            img.src = activeArticle.imageUrl;
+        } else {
+            setImageLoaded(false);
+        }
+
+        // Preload next images
+        featured.slice(1, 3).forEach(article => {
+            if (article.imageUrl) {
+                const img = new Image();
+                img.src = article.imageUrl;
+            }
+        });
+    }, [articles, activeIndex]);
+
+    // Early return after all hooks
     if (!articles || articles.length === 0) return null;
 
     const featured = articles.slice(0, 5);
@@ -19,8 +47,14 @@ const HeroCarousel = ({ articles }) => {
 
     return (
         <div className="hero-slider-wrap">
-            {/* 1. Main Slide (Width 100%) */}
-            <div className="hero-slide" style={{ backgroundImage: `url(${activeArticle.imageUrl || 'https://via.placeholder.com/1200x600'})` }}>
+            {/* 1. Main Slide with optimized image loading */}
+            <div 
+                className="hero-slide" 
+                style={{ 
+                    backgroundImage: imageLoaded ? `url(${activeArticle.imageUrl || 'https://via.placeholder.com/1200x600'})` : 'none',
+                    backgroundColor: imageLoaded ? 'transparent' : '#f8f9fa'
+                }}
+            >
                 <div className="hero-overlay">
                     <span className="hero-cat-badge">{activeArticle.category}</span>
                     <Link to={`/article/${activeArticle._id}`} className="text-decoration-none">
@@ -40,6 +74,7 @@ const HeroCarousel = ({ articles }) => {
                     className="btn btn-dark btn-sm rounded-0"
                     style={{ pointerEvents: 'auto', opacity: 0.7 }}
                     onClick={() => setActiveIndex(activeIndex === 0 ? featured.length - 1 : activeIndex - 1)}
+                    aria-label="Previous slide"
                 >
                     <i className="fas fa-chevron-left"></i>
                 </button>
@@ -47,6 +82,7 @@ const HeroCarousel = ({ articles }) => {
                     className="btn btn-dark btn-sm rounded-0"
                     style={{ pointerEvents: 'auto', opacity: 0.7 }}
                     onClick={() => setActiveIndex((activeIndex + 1) % featured.length)}
+                    aria-label="Next slide"
                 >
                     <i className="fas fa-chevron-right"></i>
                 </button>
@@ -60,6 +96,7 @@ const HeroCarousel = ({ articles }) => {
                         className={`btn btn-sm rounded-circle p-1 mx-1 ${idx === activeIndex ? 'btn-red' : 'btn-light'}`}
                         style={{ width: '10px', height: '10px' }}
                         onClick={() => setActiveIndex(idx)}
+                        aria-label={`Go to slide ${idx + 1}`}
                     />
                 ))}
             </div>

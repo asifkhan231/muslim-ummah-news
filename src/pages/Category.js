@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import ArticleCard from '../components/ArticleCard';
 import Sidebar from '../components/Sidebar';
 import { API_BASE_URL } from '../config/api';
@@ -129,6 +129,24 @@ const Category = () => {
         description: 'Athletic achievements, sports developments, and Muslim athletes making headlines.',
         color: '#fd7e14',
         icon: 'fas fa-trophy'
+      },
+      'human-rights': {
+        title: 'Human Rights',
+        description: 'Human rights violations, civil liberties, discrimination, and legal rights issues affecting Muslim communities.',
+        color: '#dc3545',
+        icon: 'fas fa-balance-scale'
+      },
+      conflict: {
+        title: 'Conflict & Security',
+        description: 'Armed conflicts, military operations, security situations, and peace processes in regions with Muslim populations.',
+        color: '#fd7e14',
+        icon: 'fas fa-shield-alt'
+      },
+      persecution: {
+        title: 'Persecution & Oppression',
+        description: 'Systematic persecution, ethnic cleansing, mass detention, and oppression of Muslim minorities worldwide.',
+        color: '#6f42c1',
+        icon: 'fas fa-exclamation-triangle'
       }
     };
     return categoryInfo[cat] || { title: cat, description: '', color: '#6c757d', icon: 'fas fa-newspaper' };
@@ -193,6 +211,20 @@ const Category = () => {
 
   return (
     <div className="container mt-4">
+      {/* Breadcrumb */}
+      <nav aria-label="breadcrumb" className="mb-3">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item">
+            <Link to="/" className="text-decoration-none">
+              <i className="fas fa-home me-1"></i>Home
+            </Link>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            {categoryInfo.title}
+          </li>
+        </ol>
+      </nav>
+
       {/* Category Header */}
       <div className="row mb-4">
         <div className="col-12">
@@ -230,18 +262,19 @@ const Category = () => {
             <small className="text-muted">
               {!loading && articles.length > 0 && (
                 <>
-                  Showing {articles.length} articles
+                  Showing {articles.length} of {totalPages * 10} articles
                 </>
               )}
             </small>
           </div>
 
           {loading ? (
-            <div className="loading-spinner">
-              <div className="spinner-border text-primary" role="status">
+            <div className="text-center py-5">
+              <div className="spinner-border text-primary mb-3" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
-              <p className="mt-3 text-muted">Loading {categoryInfo.title} news...</p>
+              <h5>Loading {categoryInfo.title} Articles...</h5>
+              <p className="text-muted">Please wait while we fetch the latest news</p>
             </div>
           ) : error ? (
             <div className="alert alert-danger" role="alert">
@@ -255,16 +288,29 @@ const Category = () => {
               </button>
             </div>
           ) : articles.length === 0 ? (
-            <div className="empty-state">
-              <i className={`${categoryInfo.icon} fa-4x mb-3`} style={{ color: categoryInfo.color }}></i>
-              <h4>No {categoryInfo.title} Articles Found</h4>
-              <p>We're working to bring you the latest {categoryInfo.title} news. Please check back soon.</p>
+            <div className="empty-state text-center py-5">
+              <div className="mb-4">
+                <i className={`${categoryInfo.icon} fa-4x mb-3`} style={{ color: categoryInfo.color }}></i>
+              </div>
+              <h4 className="mb-3">No {categoryInfo.title} Articles Found</h4>
+              <p className="text-muted mb-4">
+                We're working to bring you the latest {categoryInfo.title} news. Please check back soon.
+              </p>
+              <button 
+                className="btn btn-primary"
+                onClick={() => fetchArticles(1)}
+              >
+                <i className="fas fa-refresh me-2"></i>
+                Refresh
+              </button>
             </div>
           ) : (
             <>
-              <div className="articles-container">
+              <div className="row">
                 {articles.map(article => (
-                  <ArticleCard key={article._id} article={article} />
+                  <div key={article._id} className="col-md-6 mb-4">
+                    <ArticleCard article={article} />
+                  </div>
                 ))}
               </div>
               {renderPagination()}

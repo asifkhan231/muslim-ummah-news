@@ -143,7 +143,7 @@ const Home = () => {
                 <div className="row">
                   {articles.map((article, index) => (
                     <div key={article._id} className="col-md-6 mb-4">
-                      <ArticleCard article={article} />
+                      <ArticleCard article={article} priority={index < 4} />
                     </div>
                   ))}
                 </div>
