@@ -12,11 +12,7 @@ const Category = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchArticles(1);
-  }, [category]);
-
-  const fetchArticles = async (page = 1) => {
+  const fetchArticles = React.useCallback(async (page = 1) => {
     try {
       setLoading(true);
       setError(null);
@@ -31,7 +27,11 @@ const Category = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [category]);
+
+  useEffect(() => {
+    fetchArticles(1);
+  }, [fetchArticles, category]);
 
   const handlePageChange = (page) => {
     fetchArticles(page);
@@ -164,8 +164,8 @@ const Category = () => {
     if (currentPage > 1) {
       pages.push(
         <li key="prev" className="page-item">
-          <button 
-            className="page-link" 
+          <button
+            className="page-link"
             onClick={() => handlePageChange(currentPage - 1)}
           >
             <i className="fas fa-chevron-left"></i>
@@ -177,8 +177,8 @@ const Category = () => {
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <li key={i} className={`page-item ${i === currentPage ? 'active' : ''}`}>
-          <button 
-            className="page-link" 
+          <button
+            className="page-link"
             onClick={() => handlePageChange(i)}
           >
             {i}
@@ -190,8 +190,8 @@ const Category = () => {
     if (currentPage < totalPages) {
       pages.push(
         <li key="next" className="page-item">
-          <button 
-            className="page-link" 
+          <button
+            className="page-link"
             onClick={() => handlePageChange(currentPage + 1)}
           >
             <i className="fas fa-chevron-right"></i>
@@ -228,15 +228,15 @@ const Category = () => {
       {/* Category Header */}
       <div className="row mb-4">
         <div className="col-12">
-          <div 
+          <div
             className="category-header p-4 rounded"
-            style={{ 
+            style={{
               background: `linear-gradient(135deg, ${categoryInfo.color}20 0%, ${categoryInfo.color}10 100%)`,
               border: `2px solid ${categoryInfo.color}30`
             }}
           >
             <div className="d-flex align-items-center">
-              <div 
+              <div
                 className="category-icon me-3 p-3 rounded-circle"
                 style={{ backgroundColor: categoryInfo.color, color: 'white' }}
               >
@@ -280,7 +280,7 @@ const Category = () => {
             <div className="alert alert-danger" role="alert">
               <i className="fas fa-exclamation-triangle me-2"></i>
               {error}
-              <button 
+              <button
                 className="btn btn-outline-danger btn-sm ms-3"
                 onClick={() => fetchArticles(currentPage)}
               >
@@ -296,7 +296,7 @@ const Category = () => {
               <p className="text-muted mb-4">
                 We're working to bring you the latest {categoryInfo.title} news. Please check back soon.
               </p>
-              <button 
+              <button
                 className="btn btn-primary"
                 onClick={() => fetchArticles(1)}
               >

@@ -105,10 +105,10 @@ const Sidebar = () => {
       <div className="widget mb-5">
         <h4 className="section-title">Follow Us</h4>
         <div className="d-flex gap-2">
-          <a href="#" className="btn btn-outline-secondary btn-sm rounded-0 flex-grow-1"><i className="fab fa-facebook-f"></i></a>
-          <a href="#" className="btn btn-outline-secondary btn-sm rounded-0 flex-grow-1"><i className="fab fa-twitter"></i></a>
-          <a href="#" className="btn btn-outline-secondary btn-sm rounded-0 flex-grow-1"><i className="fab fa-instagram"></i></a>
-          <a href="#" className="btn btn-outline-secondary btn-sm rounded-0 flex-grow-1"><i className="fab fa-youtube"></i></a>
+          <a href="/" onClick={(e) => e.preventDefault()} className="btn btn-outline-secondary btn-sm rounded-0 flex-grow-1"><i className="fab fa-facebook-f"></i></a>
+          <a href="/" onClick={(e) => e.preventDefault()} className="btn btn-outline-secondary btn-sm rounded-0 flex-grow-1"><i className="fab fa-twitter"></i></a>
+          <a href="/" onClick={(e) => e.preventDefault()} className="btn btn-outline-secondary btn-sm rounded-0 flex-grow-1"><i className="fab fa-instagram"></i></a>
+          <a href="/" onClick={(e) => e.preventDefault()} className="btn btn-outline-secondary btn-sm rounded-0 flex-grow-1"><i className="fab fa-youtube"></i></a>
         </div>
       </div>
 

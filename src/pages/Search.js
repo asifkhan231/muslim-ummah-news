@@ -13,13 +13,7 @@ const Search = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (query) {
-      fetchArticles(1);
-    }
-  }, [query]);
-
-  const fetchArticles = async (page = 1) => {
+  const fetchArticles = React.useCallback(async (page = 1) => {
     try {
       setLoading(true);
       setError(null);
@@ -34,7 +28,13 @@ const Search = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [query]);
+
+  useEffect(() => {
+    if (query) {
+      fetchArticles(1);
+    }
+  }, [fetchArticles, query]);
 
   const handlePageChange = (page) => {
     fetchArticles(page);
@@ -51,8 +51,8 @@ const Search = () => {
     if (currentPage > 1) {
       pages.push(
         <li key="prev" className="page-item">
-          <button 
-            className="page-link" 
+          <button
+            className="page-link"
             onClick={() => handlePageChange(currentPage - 1)}
           >
             <i className="fas fa-chevron-left"></i>
@@ -64,8 +64,8 @@ const Search = () => {
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <li key={i} className={`page-item ${i === currentPage ? 'active' : ''}`}>
-          <button 
-            className="page-link" 
+          <button
+            className="page-link"
             onClick={() => handlePageChange(i)}
           >
             {i}
@@ -77,8 +77,8 @@ const Search = () => {
     if (currentPage < totalPages) {
       pages.push(
         <li key="next" className="page-item">
-          <button 
-            className="page-link" 
+          <button
+            className="page-link"
             onClick={() => handlePageChange(currentPage + 1)}
           >
             <i className="fas fa-chevron-right"></i>
@@ -140,7 +140,7 @@ const Search = () => {
             <div className="alert alert-danger" role="alert">
               <i className="fas fa-exclamation-triangle me-2"></i>
               {error}
-              <button 
+              <button
                 className="btn btn-outline-danger btn-sm ms-3"
                 onClick={() => fetchArticles(currentPage)}
               >
@@ -157,7 +157,7 @@ const Search = () => {
                 Try different keywords or browse our categories.
               </p>
               <div className="mt-3">
-                <button 
+                <button
                   className="btn btn-primary me-2"
                   onClick={() => window.history.back()}
                 >

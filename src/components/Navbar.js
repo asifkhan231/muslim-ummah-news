@@ -32,10 +32,10 @@ const Navbar = () => {
               <span className="text-white small"><i className="fas fa-cloud-sun me-2"></i>London, UK 12°C</span>
             </div>
             <div className="col-md-6 text-end">
-              <a href="#" className="top-bar-link"><i className="fab fa-facebook-f"></i></a>
-              <a href="#" className="top-bar-link"><i className="fab fa-twitter"></i></a>
-              <a href="#" className="top-bar-link"><i className="fab fa-instagram"></i></a>
-              <a href="#" className="top-bar-link"><i className="fab fa-youtube"></i></a>
+              <a href="/" className="top-bar-link" onClick={(e) => e.preventDefault()}><i className="fab fa-facebook-f"></i></a>
+              <a href="/" className="top-bar-link" onClick={(e) => e.preventDefault()}><i className="fab fa-twitter"></i></a>
+              <a href="/" className="top-bar-link" onClick={(e) => e.preventDefault()}><i className="fab fa-instagram"></i></a>
+              <a href="/" className="top-bar-link" onClick={(e) => e.preventDefault()}><i className="fab fa-youtube"></i></a>
             </div>
           </div>
         </div>
@@ -99,7 +99,7 @@ const Navbar = () => {
                 <NavLink to="/category/achievements" className="nav-link">ACHIEVEMENTS</NavLink>
               </li>
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a className="nav-link dropdown-toggle" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false" onClick={(e) => e.preventDefault()}>
                   REGIONS
                 </a>
                 <ul className="dropdown-menu rounded-0 shadow border-0">
