@@ -18,7 +18,7 @@ const Sidebar = () => {
   const fetchSidebarData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch recent articles
       const recentResponse = await fetch(`${API_BASE_URL}/articles/recent?limit=4`);
       const recentData = await recentResponse.json();
@@ -35,14 +35,14 @@ const Sidebar = () => {
       const statsResponse = await fetch(`${API_BASE_URL}/articles/stats`);
       const statsData = await statsResponse.json();
       console.log('Stats data:', statsData);
-      
+
       // Parse the stats correctly
       const parsedStats = {
         totalArticles: statsData.totalArticles || 0,
         totalSources: 0, // Will be updated from sources API
         categories: statsData.categoriesStats ? statsData.categoriesStats.length : 0
       };
-      
+
       // Create category counts object
       const categoryCounts = {};
       if (statsData.categoriesStats) {
@@ -55,18 +55,18 @@ const Sidebar = () => {
       const sourcesResponse = await fetch(`${API_BASE_URL}/sources/stats`);
       const sourcesData = await sourcesResponse.json();
       console.log('Sources data:', sourcesData);
-      
+
       // Also fetch individual sources for display
       const individualSourcesResponse = await fetch(`${API_BASE_URL}/sources`);
       const individualSourcesData = await individualSourcesResponse.json();
       console.log('Individual sources:', individualSourcesData);
-      
+
       // Update total sources count
       parsedStats.totalSources = sourcesData.totalSources || 0;
-      
+
       // Set the parsed stats
       setStats(parsedStats);
-      
+
       // Use individual sources for display
       setSources(Array.isArray(individualSourcesData) ? individualSourcesData : []);
 
@@ -144,11 +144,11 @@ const Sidebar = () => {
             <div className="d-flex flex-column gap-3">
               {(activeTab === 'recent' ? recentArticles : popularArticles).map(article => (
                 <div key={article._id} className="d-flex align-items-center">
-                  <div 
-                    className="bg-light me-3 d-flex align-items-center justify-content-center" 
-                    style={{ 
-                      width: '60px', 
-                      height: '60px', 
+                  <div
+                    className="bg-light me-3 d-flex align-items-center justify-content-center"
+                    style={{
+                      width: '60px',
+                      height: '60px',
                       borderRadius: '2px',
                       backgroundImage: article.imageUrl ? `url(${article.imageUrl})` : 'none',
                       backgroundSize: 'cover',
@@ -255,11 +255,11 @@ const Sidebar = () => {
         <h4 className="section-title">Trending Topics</h4>
         <div className="trending-tags">
           <Link to="/category/palestine" className="btn-tag">#Palestine</Link>
+          <Link to="/category/achievements" className="btn-tag">#GoodNews</Link>
+          <Link to="/category/asia" className="btn-tag">#Uyghur</Link>
+          <Link to="/category/africa" className="btn-tag">#Sudan</Link>
           <Link to="/category/politics" className="btn-tag">#Politics</Link>
-          <Link to="/category/economics" className="btn-tag">#Economics</Link>
-          <Link to="/category/technology" className="btn-tag">#Technology</Link>
-          <Link to="/category/culture" className="btn-tag">#Culture</Link>
-          <Link to="/category/education" className="btn-tag">#Education</Link>
+          <Link to="/category/technology" className="btn-tag">#Tech</Link>
         </div>
       </div>
 

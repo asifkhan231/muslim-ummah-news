@@ -24,6 +24,9 @@ const FeaturedGrid = ({ articles }) => {
                             <span className={`badge category-badge mb-2 bg-${mainArticle.category || 'general'}`}>
                                 {mainArticle.category}
                             </span>
+                            {mainArticle.hasVideo && (
+                                <span className="badge bg-danger mb-2 ms-2"><i className="fas fa-play me-1"></i> Video</span>
+                            )}
                             <div className="meta-text small mb-2 opacity-75">
                                 {new Date(mainArticle.publishedAt).toLocaleDateString()} • {mainArticle.author || 'Staff'}
                             </div>
@@ -47,6 +50,9 @@ const FeaturedGrid = ({ articles }) => {
                                 <span className={`badge category-badge mb-2 bg-${article.category || 'general'}`}>
                                     {article.category}
                                 </span>
+                                {article.hasVideo && (
+                                    <span className="badge bg-danger mb-2 ms-2"><i className="fas fa-play me-1"></i> Video</span>
+                                )}
                                 <Link to={`/article/${article._id}`} className="text-white text-decoration-none">
                                     <h4 className="h5 fw-bold mb-1">{article.title}</h4>
                                 </Link>

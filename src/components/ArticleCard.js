@@ -10,8 +10,8 @@ const ArticleCard = ({ article, priority = false }) => {
             src={article.imageUrl || 'https://via.placeholder.com/400x200'}
             alt={article.title}
             className="img-fluid"
-            style={{ 
-              minHeight: '180px', 
+            style={{
+              minHeight: '180px',
               maxHeight: '180px',
               objectFit: 'cover',
               width: '100%'
@@ -22,17 +22,34 @@ const ArticleCard = ({ article, priority = false }) => {
             height="180"
           />
         </Link>
-        
+
         {/* Category Badge */}
         <div className="post-cat">{article.category}</div>
-        
+
         {/* AI Enhancement Badge - Moved to image overlay */}
         {article.isAiInhanced && (
           <div className="ai-badge-overlay">
             <i className="fas fa-robot"></i>
           </div>
         )}
-        
+
+        {/* Video Badge */}
+        {article.hasVideo && (
+          <div className="video-badge-overlay" style={{
+            position: 'absolute',
+            top: '10px',
+            left: '10px',
+            backgroundColor: 'rgba(255, 0, 0, 0.8)',
+            color: 'white',
+            padding: '5px 10px',
+            borderRadius: '4px',
+            zIndex: 2,
+            fontSize: '12px'
+          }}>
+            <i className="fas fa-play me-1"></i> Video
+          </div>
+        )}
+
         {/* AI Facts Preview - Moved to image overlay bottom */}
         {article.aiFacts && article.aiFacts.length > 0 && (
           <div className="ai-facts-overlay">
@@ -41,12 +58,12 @@ const ArticleCard = ({ article, priority = false }) => {
           </div>
         )}
       </div>
-      
+
       <div className="post-content compact">
         <h3 className="post-title compact">
           <Link to={`/article/${article._id}`}>{article.title}</Link>
         </h3>
-        
+
         <div className="post-meta compact mb-2">
           <span>{new Date(article.publishedAt).toLocaleDateString()}</span>
           {article.isAiInhanced && (
@@ -55,7 +72,7 @@ const ArticleCard = ({ article, priority = false }) => {
             </span>
           )}
         </div>
-        
+
         <p className="text-muted small compact">
           {article.summary ? article.summary.substring(0, 80) : ''}...
         </p>

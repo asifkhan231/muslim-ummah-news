@@ -5,7 +5,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-  
+
   const currentDate = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
@@ -96,15 +96,27 @@ const Navbar = () => {
                 <NavLink to="/category/human-rights" className="nav-link">HUMAN RIGHTS</NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to="/category/middle-east" className="nav-link">REGIONS</NavLink>
+                <NavLink to="/category/achievements" className="nav-link">ACHIEVEMENTS</NavLink>
+              </li>
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  REGIONS
+                </a>
+                <ul className="dropdown-menu rounded-0 shadow border-0">
+                  <li><NavLink className="dropdown-item small" to="/category/middle-east">Middle East</NavLink></li>
+                  <li><NavLink className="dropdown-item small" to="/category/palestine">Palestine</NavLink></li>
+                  <li><NavLink className="dropdown-item small" to="/category/asia">Asia & China</NavLink></li>
+                  <li><NavLink className="dropdown-item small" to="/category/africa">Africa & Sudan</NavLink></li>
+                  <li><NavLink className="dropdown-item small" to="/category/europe">Europe</NavLink></li>
+                </ul>
               </li>
             </ul>
             <div className="d-flex align-items-center py-2 py-lg-0">
               <form onSubmit={handleSearch} className="input-group">
-                <input 
-                  type="text" 
-                  className="form-control form-control-sm rounded-0" 
-                  placeholder="Search..." 
+                <input
+                  type="text"
+                  className="form-control form-control-sm rounded-0"
+                  placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
