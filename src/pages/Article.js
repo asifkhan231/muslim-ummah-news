@@ -242,10 +242,10 @@ const Article = () => {
                     Key Facts & Context
                   </h6>
                   <ul className="list-unstyled mb-0">
-                    {article.aiFacts.map((fact, index) => (
+                    {article.aiFacts.map((item, index) => (
                       <li key={index} className="mb-2">
                         <i className="fas fa-check-circle text-success me-2"></i>
-                        {fact}
+                        {typeof item === 'string' ? item : item.fact || 'Key fact available'}
                       </li>
                     ))}
                   </ul>

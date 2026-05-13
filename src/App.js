@@ -2,12 +2,13 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './critical.css'; // Load critical CSS first
 import PerformanceOptimizer from './components/PerformanceOptimizer';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Category from './pages/Category';
-import Article from './pages/Article';
+import NavbarNew from './components/NavbarNew';
+import HomeNew from './pages/HomeNew';
+import CategoryNew from './pages/CategoryNew';
+import ArticleNew from './pages/ArticleNew';
+import Sources from './pages/Sources';
 import Search from './pages/Search';
-import Footer from './components/Footer';
+import FooterNew from './components/FooterNew';
 import './App.css';
 
 import Videos from './pages/Videos';
@@ -17,17 +18,18 @@ function App() {
     <Router>
       <div className="App">
         <PerformanceOptimizer />
-        <Navbar />
+        <NavbarNew />
         <main>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<HomeNew />} />
             <Route path="/videos" element={<Videos />} />
-            <Route path="/category/:category" element={<Category />} />
-            <Route path="/article/:id" element={<Article />} />
+            <Route path="/category/:category" element={<CategoryNew />} />
+            <Route path="/article/:id" element={<ArticleNew />} />
+            <Route path="/sources" element={<Sources />} />
             <Route path="/search" element={<Search />} />
           </Routes>
         </main>
-        <Footer />
+        <FooterNew />
       </div>
     </Router>
   );
