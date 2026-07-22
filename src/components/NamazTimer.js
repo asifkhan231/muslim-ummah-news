@@ -70,18 +70,21 @@ const NamazTimer = () => {
         navigator.geolocation.getCurrentPosition(
           async (position) => {
             const { latitude, longitude } = position.coords;
+            console.log('🕌 Location obtained:', { latitude, longitude });
             
             try {
               // Try backend API first
-              const response = await fetch(
-                `${API_BASE_URL}/features/prayer-times?lat=${latitude}&lng=${longitude}&method=2`,
-                { timeout: 5000 }
-              );
+              const backendUrl = `${API_BASE_URL}/features/prayer-times?lat=${latitude}&lng=${longitude}&method=2`;
+              console.log('🕌 Fetching from backend:', backendUrl);
               
+              const response = await fetch(backendUrl, { timeout: 5000 });
               const data = await response.json();
+              
+              console.log('🕌 Backend response:', data);
               
               if (data.code === 200 && data.data && data.data.timings) {
                 const timings = data.data.timings;
+                console.log('✅ Prayer times loaded from backend:', timings);
                 setPrayerTimes({
                   Fajr: formatTime(timings.Fajr),
                   Sunrise: formatTime(timings.Sunrise),
@@ -96,19 +99,22 @@ const NamazTimer = () => {
                 return;
               }
             } catch (backendError) {
-              console.log('Backend API failed, trying direct API:', backendError);
+              console.log('⚠️ Backend API failed, trying direct API:', backendError);
             }
             
             // Fallback to direct Aladhan API
             const date = new Date();
-            const directResponse = await fetch(
-              `https://api.aladhan.com/v1/timings/${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}?latitude=${latitude}&longitude=${longitude}&method=2`
-            );
+            const directUrl = `https://api.aladhan.com/v1/timings/${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}?latitude=${latitude}&longitude=${longitude}&method=2`;
+            console.log('🕌 Fetching from Aladhan API:', directUrl);
             
+            const directResponse = await fetch(directUrl);
             const directData = await directResponse.json();
+            
+            console.log('🕌 Aladhan API response:', directData);
             
             if (directData.code === 200 && directData.data && directData.data.timings) {
               const timings = directData.data.timings;
+              console.log('✅ Prayer times loaded from Aladhan:', timings);
               setPrayerTimes({
                 Fajr: formatTime(timings.Fajr),
                 Sunrise: formatTime(timings.Sunrise),
@@ -123,16 +129,17 @@ const NamazTimer = () => {
             }
           },
           (error) => {
-            console.error('Error getting location:', error);
+            console.error('❌ Error getting location:', error);
             setLocation('Location unavailable - Please enable location access');
             // Keep default times if location is denied
           }
         );
       } else {
+        console.error('❌ Geolocation not supported');
         setLocation('Geolocation not supported');
       }
     } catch (error) {
-      console.error('Error fetching prayer times:', error);
+      console.error('❌ Error fetching prayer times:', error);
       setLocation('Error loading times');
     }
   };

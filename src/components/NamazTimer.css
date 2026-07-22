@@ -1,15 +1,15 @@
 /* Namaz Timer - Light Mint Green Theme */
 .namaz-timer-card {
-  background: linear-gradient(135deg, #d4e8d4 0%, #c8e0c8 100%);
-  border-radius: 16px;
-  padding: 20px;
+  background: linear-gradient(135deg, #e8f5e8 0%, #d8eed8 100%);
+  border-radius: 12px;
+  padding: 16px;
   color: #2d5a3d;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   margin-bottom: 20px;
 }
 
 .namaz-header {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .namaz-header h5 {
@@ -42,19 +42,19 @@
 .next-prayer-info {
   background-color: transparent;
   padding: 0;
-  margin-top: 12px;
+  margin-top: 8px;
 }
 
 .next-prayer-label {
-  font-size: 13px;
+  font-size: 12px;
   color: #5a7a5a;
   font-weight: 500;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   display: block;
 }
 
 .next-prayer-name {
-  font-size: 38px;
+  font-size: 32px;
   font-weight: 700;
   color: #1a3a2a;
   margin-bottom: 0;
@@ -63,7 +63,7 @@
 }
 
 .time-remaining {
-  font-size: 15px;
+  font-size: 14px;
   color: #5a7a5a;
   font-weight: 500;
   margin-left: 10px;
@@ -71,15 +71,15 @@
 
 /* Prayer Times List */
 .prayer-times-list {
-  margin-top: 20px;
+  margin-top: 15px;
   background-color: transparent;
   padding: 0;
 }
 
 .prayer-time-item {
-  padding: 10px 16px;
-  border-radius: 10px;
-  margin-bottom: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-bottom: 5px;
   transition: all 0.3s ease;
   background-color: transparent;
 }
@@ -92,8 +92,8 @@
   background-color: #2d5a3d;
   color: white;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(45, 90, 61, 0.3);
-  padding: 12px 16px;
+  box-shadow: 0 2px 6px rgba(45, 90, 61, 0.25);
+  padding: 10px 14px;
 }
 
 .prayer-name {
@@ -116,22 +116,22 @@
 
 /* Footer Buttons */
 .prayer-footer {
-  margin-top: 20px;
-  padding-top: 15px;
+  margin-top: 15px;
+  padding-top: 12px;
   border-top: 1px solid rgba(45, 90, 61, 0.15);
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .prayer-action-btn {
   flex: 1;
-  min-width: 90px;
-  padding: 9px 14px;
+  min-width: 85px;
+  padding: 8px 12px;
   background-color: white;
   border: 1px solid rgba(45, 90, 61, 0.2);
-  border-radius: 8px;
-  font-size: 13px;
+  border-radius: 6px;
+  font-size: 12px;
   font-weight: 600;
   color: #2d5a3d;
   cursor: pointer;
@@ -139,7 +139,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .prayer-action-btn:hover {
@@ -148,9 +148,9 @@
 }
 
 .prayer-source-text {
-  margin-top: 12px;
+  margin-top: 10px;
   text-align: center;
-  font-size: 11px;
+  font-size: 10px;
   color: #7a9a7a;
   font-style: italic;
 }
@@ -158,11 +158,11 @@
 /* Responsive */
 @media (max-width: 768px) {
   .namaz-timer-card {
-    padding: 18px;
+    padding: 14px;
   }
   
   .next-prayer-name {
-    font-size: 32px;
+    font-size: 28px;
   }
   
   .prayer-footer {

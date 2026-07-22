@@ -9,6 +9,14 @@ const ArticleNew = () => {
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Helper function to extract YouTube video ID from URL
+  const getYouTubeVideoId = (url) => {
+    if (!url) return '';
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
   useEffect(() => {
     fetchArticle();
     window.scrollTo(0, 0);
@@ -58,9 +66,8 @@ const ArticleNew = () => {
   if (loading) {
     return (
       <div className="loading-container">
-        <div className="spinner-border text-warning" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
+        <div className="custom-spinner"></div>
+        <p className="loading-text">Loading article...</p>
       </div>
     );
   }
@@ -94,6 +101,13 @@ const ArticleNew = () => {
           <div className="article-category-label">
             <i className="bi bi-circle-fill"></i>
             {article.category?.toUpperCase() || 'NEWS'}
+            {article.hasVideo && (
+              <>
+                <span className="mx-2">•</span>
+                <i className="bi bi-play-circle-fill"></i>
+                <span>VIDEO</span>
+              </>
+            )}
           </div>
           <h1 className="article-main-title">{article.title}</h1>
           
@@ -132,8 +146,36 @@ const ArticleNew = () => {
           <div className="row">
             {/* Article Content */}
             <div className="col-lg-8">
-              {/* Featured Image */}
-              {article.imageUrl && (
+              {/* Featured Video - Show if available */}
+              {article.hasVideo && article.videoUrl && (
+                <div className="article-featured-video">
+                  <div className="video-wrapper">
+                    {article.videoUrl.includes('youtube.com') || article.videoUrl.includes('youtu.be') ? (
+                      <iframe
+                        src={`https://www.youtube.com/embed/${getYouTubeVideoId(article.videoUrl)}`}
+                        title={article.title}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="responsive-iframe"
+                      ></iframe>
+                    ) : (
+                      <video controls className="responsive-video">
+                        <source src={article.videoUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    )}
+                  </div>
+                  {article.isAiInhanced && (
+                    <div className="video-badge-overlay">
+                      <i className="bi bi-stars"></i> AI Enhanced
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Featured Image - Show only if no video or as fallback */}
+              {(!article.hasVideo || !article.videoUrl) && article.imageUrl && (
                 <div className="article-featured-img">
                   <img src={article.imageUrl} alt={article.title} />
                   {article.isAiInhanced && (
@@ -204,9 +246,6 @@ const ArticleNew = () => {
                   <span>AI Enhanced</span>
                 </div>
                 <h3>Key Insights</h3>
-                <p className="insights-intro">
-                  Extracted and AI-verified, get insights on what's happening in a format that's easy to understand.
-                </p>
                 {article.aiFacts && article.aiFacts.length > 0 ? (
                   <>
                     <ul className="insights-list">
@@ -220,9 +259,8 @@ const ArticleNew = () => {
                   </>
                 ) : (
                   <ul className="insights-list">
-                    <li>This article provides comprehensive coverage of the topic</li>
-                    <li>Multiple verified sources confirm the information</li>
-                    <li>Analysis includes regional and global perspectives</li>
+                    <li>No AI insight available.</li>
+                    
                   </ul>
                 )}
 

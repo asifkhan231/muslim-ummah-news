@@ -116,9 +116,8 @@ const HomeNew = () => {
   if (loading) {
     return (
       <div className="loading-container">
-        <div className="spinner-border text-success" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
+        <div className="custom-spinner"></div>
+        <p>Loading latest news...</p>
       </div>
     );
   }
@@ -208,6 +207,11 @@ const HomeNew = () => {
                           {article.isAiInhanced && (
                             <span className="badge badge-ai-small">
                               <i className="bi bi-stars"></i> AI Summary
+                            </span>
+                          )}
+                          {article.hasVideo && (
+                            <span className="badge badge-video-small">
+                              <i className="bi bi-play-circle-fill"></i> Video
                             </span>
                           )}
                         </div>

@@ -146,9 +146,7 @@ const CategoryNew = () => {
             <div className="col-lg-8">
               {loading ? (
                 <div className="loading-state">
-                  <div className="spinner-border text-success" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
+                  <div className="custom-spinner"></div>
                   <p>Loading articles...</p>
                 </div>
               ) : articles.length === 0 ? (
@@ -177,6 +175,11 @@ const CategoryNew = () => {
                             {article.isAiInhanced && (
                               <span className="badge-ai-sm">
                                 <i className="bi bi-stars"></i> AI
+                              </span>
+                            )}
+                            {article.hasVideo && (
+                              <span className="badge-video-sm">
+                                <i className="bi bi-play-circle-fill"></i> Video
                               </span>
                             )}
                           </div>
